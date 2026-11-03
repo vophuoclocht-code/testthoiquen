@@ -43,7 +43,7 @@ document.addEventListener('click',e=>{const t=e.target,q=s=>t.closest(s);let m;
   else if(m=q('[data-edit]')){const x=D.habits.find(h=>h.id===m.dataset.edit);selIcon=x.icon;sheet(formHtml(x));updateXp()}
   else if(m=q('[data-ic]')){selIcon=m.dataset.ic;document.querySelectorAll('[data-ic]').forEach(b=>b.classList.toggle('is-on',b===m))}
   else if(q('[data-th2]')){e.preventDefault();document.querySelectorAll('.lvin').forEach(e=>e.value=2)}
-  else if(m=q('[data-save]')){const name=$('#f-name').value.trim(),n=(id,d)=>{const v=Math.floor(+$('#'+id).value);return isNaN(v)||v<0?d:v},sg=k=>document.querySelector('.seg[data-seg="'+k+'"] .is-on').dataset.v;
+  else if(m=q('[data-save]')){const name=cut5($('#f-name').value.replace(/\s+/g,' ').trim()),n=(id,d)=>{const v=Math.floor(+$('#'+id).value);return isNaN(v)||v<0?d:v},sg=k=>document.querySelector('.seg[data-seg="'+k+'"] .is-on').dataset.v;
     if(!name){toast('Hãy nhập tên thói quen');return}
     const lvs=Array.from({length:12},(_,i)=>Math.max(1,n('f-l'+i,10))),kind=sg('kind');
     const o={name,icon:selIcon,kind,unit:$('#f-unit').value.trim(),step:kind==='count'?1:Math.max(1,n('f-step',1)),goal:n('f-goal',1),mode:sg('mode'),limit:n('f-limit',0),lvs,th:lvs[0]};
@@ -67,6 +67,9 @@ if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js');
 
 document.addEventListener('input',e=>{if(/^f-l\d$/.test(e.target.id))updateXp()});
+/* Tên thói quen tối đa 5 chữ (tính theo từ cách nhau bởi dấu cách) */
+const MAXW=5,cut5=v=>{const w=v.split(/\s+/).filter(Boolean);return w.length>MAXW?w.slice(0,MAXW).join(' '):v};
+document.addEventListener('input',e=>{const t=e.target;if(t.id==='f-name'){const c=cut5(t.value);if(c!==t.value){t.value=c;toast('Tên tối đa '+MAXW+' chữ')}}});
 
 function adjSave(){const a=adjCalc();if(isNaN(a.n)){toast('Hãy nhập một số');return}
   if(a.r.md==='set'&&a.n<0){toast('Số mới không được âm');return}

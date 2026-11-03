@@ -446,3 +446,14 @@ input[type=date]{width:100%;min-height:48px;padding:10px 14px;border:1.5px solid
 /* .pg trước đây bị align-self:start nên co lại, thanh tiến độ rộng 0px */
 .habit .pg{align-self:stretch;width:100%}
 .habit .h-name{gap:8px}
+
+/* ===== v21: tên + biểu tượng nằm trong chiều dài thanh tiến độ; tên được xuống dòng ===== */
+.habit .hc{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:1fr auto;column-gap:10px;row-gap:6px;height:auto;min-height:84px}
+.habit .hrow,.habit .pg{display:contents}
+.habit .h-main{grid-column:1;grid-row:1;align-self:center;min-width:0}
+.habit .count{grid-column:2;grid-row:1;align-self:center;justify-self:end}
+.habit .pg .wave{grid-column:1;grid-row:2;align-self:center;min-width:0}
+.habit .pg .pgn{grid-column:2;grid-row:2;justify-self:end;align-self:center}
+.habit .h-name{align-items:center;gap:6px;line-height:1.2}
+.habit .h-name .ic{flex:none}
+.habit .h-name span{flex:1;min-width:0;line-height:1.2;padding:.1em 0;margin:-.1em 0;overflow:hidden;text-overflow:clip}

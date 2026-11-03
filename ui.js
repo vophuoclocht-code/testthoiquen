@@ -56,19 +56,19 @@ function rHabits(){const hs=D.habits.filter(h=>!h.arch),n=new Date(),nm=D.cfg.na
     '<div class="count"><b class="cnum'+(len>=4?' xl':len==3?' l':'')+'">'+s.today.v+'</b><span>'+(x.goal>0?'/ '+x.goal+u:(x.unit?esc(x.unit):'hôm nay'))+'</span></div></div>'+
     '<div class="pg"><div class="wave"><i style="--pct:'+(s.into/s.th*100).toFixed(1)+'%"></i></div><em class="pgn">'+s.into+'/'+s.th+(s.stars?' ★'+s.stars:'')+'</em></div></div></article>'}
   return h}
-/* Tự chỉnh cỡ chữ tên cho vừa khung (đã đo thật):
-   - tên từ 4 chữ trở xuống: 1 dòng, to hết mức vừa;
-   - tên từ 5 chữ trở lên (hoặc quá dài không vừa 1 dòng): xuống 2 dòng và thu nhỏ chữ. */
+/* Tên thói quen (tối đa 5 chữ) + biểu tượng luôn nằm gọn trong chiều dài thanh tiến độ (cột h-main rộng đúng bằng thanh).
+   Thứ tự thử: 1 dòng chữ to → 2 dòng → 3 dòng, chữ và biểu tượng thu nhỏ cùng nhau cho vừa khung. */
 function fitNames(){document.querySelectorAll('.habit .h-name').forEach(el=>{
-  const sp=el.querySelector('span'),ico=el.querySelector('svg'),sub=el.parentNode.querySelector('.h-sub2'),words=sp.textContent.trim().split(/\s+/).length;
-  const set=v=>{el.style.fontSize=v+'rem';ico.style.width=ico.style.height=Math.round(v*21)+'px'};
-  const one=()=>{sp.style.whiteSpace='nowrap';sp.style.display='block';sp.style.webkitLineClamp='unset'};
-  const two=()=>{sp.style.whiteSpace='normal';sp.style.display='-webkit-box';sp.style.webkitBoxOrient='vertical';sp.style.webkitLineClamp='2'};
-  let f,min;
-  if(words<5){f=sub?1.45:1.65;min=1.0;one();set(f);while(f>min&&sp.scrollWidth>sp.clientWidth+1){f=Math.round((f-.05)*100)/100;set(f)}
-    if(sp.scrollWidth<=sp.clientWidth+1)return}
-  f=sub?1.0:1.15;min=.85;two();set(f);
-  while(f>min&&sp.scrollHeight>sp.clientHeight+1){f=Math.round((f-.05)*100)/100;set(f)}})}
+  const sp=el.querySelector('span'),ico=el.querySelector('svg'),main=el.parentNode,AV=60; /* AV = chiều cao tối đa của vùng tên + dòng phụ (84 - thanh tiến độ - khoảng cách) */
+  const set=f=>{el.style.fontSize=f+'rem';ico.style.width=ico.style.height=Math.round(f*20)+'px'};
+  const lines=n=>{if(n===1){sp.style.whiteSpace='nowrap';sp.style.display='block';sp.style.webkitLineClamp='unset'}
+    else{sp.style.whiteSpace='normal';sp.style.display='-webkit-box';sp.style.webkitBoxOrient='vertical';sp.style.webkitLineClamp=String(n)}};
+  const okW=()=>sp.scrollWidth<=sp.clientWidth+1,okH=n=>n===1||sp.scrollHeight<=sp.clientHeight+1;
+  const tryRun=(n,from,to,needH)=>{lines(n);for(let f=from;f>=to-1e-6;f=Math.round((f-.05)*100)/100){set(f);if(okW()&&okH(n)&&(!needH||main.offsetHeight<=AV))return true}return false};
+  if(tryRun(1,1.5,1.25,false))return;
+  if(tryRun(2,1.3,.95,true))return;
+  if(tryRun(3,1.0,.85,true))return;
+  lines(3);set(.85)})}
 /* Mỗi cấp một số điểm riêng do người dùng nhập: lvs = [cấp1→2, cấp2→3, cấp3→4, mỗi ★] */
 function xpChips(L){return L.map((v,k)=>'<span class="xp" style="background:'+LV[k]+';color:'+(k>=2?'#331400':'#fff')+'">'+(k<3?(k+1)+'→'+(k+2):'mỗi ★')+' <b>'+v+'</b></span>').join('')}
 function updateXp(){}
