@@ -11,7 +11,7 @@ const ANC=[['#6D28D9','#A855F7'],['#B02ACB','#EC4899'],['#F97316','#FBBF24'],['#
 function lvCol(L){const p=L/11*3,i=Math.min(2,Math.floor(p)),t=p-i;return [mix(ANC[i][0],ANC[i+1][0],t),mix(ANC[i][1],ANC[i+1][1],t)]}
 function lvStyle(L){const c=lvCol(L);return '--c0:'+c[0]+';--c1:'+c[1]+';--gl:'+c[1]+';--fg:'+(L>=7?'#331400':'#fff')}
 /* Huy hiệu = cảnh phủ kín ô 84x84, tên cấp đè lên bằng lớp mờ.
-   Cấp 1 Khổ Hải: quả cầu chìm dưới nước.  Cấp 2 Vọng Tâm: quả cầu GIỮ NGUYÊN vị trí cấp 1, thêm 3 vòng sóng trên mặt nước.  Cấp 3 Mệnh Tuyền: quả cầu dưới mặt nước, đỉnh chạm mặt nước tại tâm 3 vòng sóng.  Cấp 4 Linh Triều: như Mệnh Tuyền nhưng 6 vòng sóng.  Cấp 5-6: bay cao dần.
+   Cấp 1 Khổ Hải: quả cầu chìm dưới nước.  Cấp 2 Vọng Tâm: quả cầu GIỮ NGUYÊN vị trí cấp 1 (dưới nước, đỉnh chạm mặt nước tại tâm sóng), thêm 3 vòng sóng.  Cấp 3 Mệnh Tuyền: quả cầu nổi trên mặt nước, đáy chạm mặt nước, 3 vòng sóng.  Cấp 4 Linh Triều: như Mệnh Tuyền nhưng 6 vòng sóng.  Cấp 5-6: bay cao dần.
    Cấp 6 Bỉ Ngạn trở đi: chỉ còn bầu trời, không có nước.
    7 Tinh Huy: 1 ngôi sao 4 cánh.  8-9: thêm sao con.  10 Pháp Tướng: sao con xếp thành vòng tròn quanh sao chính.
    11 Quy Chân: vòng tròn khép lại, có đường tròn bao quanh.  12 Kim Tính: hợp thành 1 ngôi sao ở chính giữa, 8 tia sáng đều nhau. */
@@ -21,14 +21,13 @@ function badge(lv){const L=lv-1,x=42;
   const rip=(o,n)=>Array.from({length:n},(_,i)=>{const rx=n>3?8+i*6.2:9+i*7,ry=rx*.27,op=Math.max(0,o*(1-i*(n>3?.13:.2)));return '<ellipse cx=\"'+x+'\" cy=\"50\" rx=\"'+rx.toFixed(1)+'\" ry=\"'+ry.toFixed(1)+'\" fill=\"none\" stroke=\"#ffc457\" stroke-width=\"'+(1.5-i*.06).toFixed(2)+'\" opacity=\"'+op.toFixed(2)+'\"/>'}).join('');
   let g='<svg viewBox="0 0 84 84" aria-hidden="true"><defs><linearGradient id="bdk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a24b0"/><stop offset="1" stop-color="#e060c4"/></linearGradient><linearGradient id="bdw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9a58f0"/><stop offset="1" stop-color="#5b25ad"/></linearGradient><radialGradient id="bdg"><stop offset="0" stop-color="#fff6c9" stop-opacity=".95"/><stop offset="1" stop-color="#ffd24d" stop-opacity="0"/></radialGradient></defs>';
   g+=L<=4?'<rect width="84" height="40" fill="url(#bdk)"/><rect y="40" width="84" height="44" fill="url(#bdw)"/>':'<rect width="84" height="84" fill="url(#bdk)"/>';
-  if(L<=5){const m=[0,0,1,1,4,5][L],r=4.2+m*.5,f=mix('#ffc4ec','#ffe9a0',m/5),
-      y=L<=1?48:L===2?50+r:L===3?50-r:[34,31][L-4]; /* L0-1: cùng một vị trí, không di chuyển | L2: dưới mặt nước, đỉnh chạm mặt nước y=50 tại tâm sóng | L3: đứng trên mặt nước | L4-5: bay cao */
-    if(L===3)g+=rip(.85,6); /* sóng vẽ TRƯỚC: nửa sóng phía sau bị quả cầu che, quả cầu chạm mặt nước */
+  if(L<=5){const m=[1,1,1,1,4,5][L],r=4.2+m*.5,f=mix('#ffc4ec','#ffe9a0',m/5),
+      y=L<=1?50+r:L<=3?50-r:[34,31][L-4]; /* L0-1: cùng một vị trí (dưới nước, đỉnh chạm mặt nước y=50), không di chuyển | L2-3: đứng trên mặt nước | L4-5: bay cao */
+    if(L===2||L===3)g+=rip(.85,L===3?6:3); /* sóng vẽ TRƯỚC: nửa sóng phía sau bị quả cầu che, quả cầu chạm mặt nước */
     for(let i=1;i<=Math.min(m-1,3);i++)g+='<circle cx="'+x+'" cy="'+(y+r+i*4.5).toFixed(1)+'" r="'+(1.7-i*.3).toFixed(1)+'" fill="#ffd24d" opacity="'+(.65-i*.15).toFixed(2)+'"/>';
     g+='<circle cx="'+x+'" cy="'+y+'" r="'+(r*2.6).toFixed(1)+'" fill="url(#bdg)" opacity="'+(m===0?.2:.3+m*.1).toFixed(2)+'"/><circle cx="'+x+'" cy="'+y+'" r="'+r.toFixed(1)+'" fill="'+f+'"/><circle cx="'+(x-r*.3).toFixed(1)+'" cy="'+(y-r*.3).toFixed(1)+'" r="'+(r*.35).toFixed(1)+'" fill="#fff" opacity=".85"/>';
-    if(L<=2)g+='<rect y="40" width="84" height="44" fill="#8a4ee6" opacity="'+(L===2?.3:.4)+'"/>'; /* lớp nước phủ lên: quả cầu nằm dưới nước */
-    if(L===1)g+=rip(.95,3); /* Vọng Tâm: quả cầu đứng yên như Khổ Hải, sóng nằm TRÊN mặt nước (vẽ sau lớp nước) */
-    if(L===2)g+=rip(.9,3)+'<ellipse cx="'+x+'" cy="50" rx="3" ry=".85" fill="#fff6c9" opacity=".9"/>'; /* Mệnh Tuyền: sóng trên mặt nước, đỉnh quả cầu (dưới nước) chạm mặt nước đúng tâm sóng */
+    if(L<=1)g+='<rect y="40" width="84" height="44" fill="#8a4ee6" opacity="'+(L===1?.3:.4)+'"/>'; /* lớp nước phủ lên: quả cầu nằm dưới nước */
+    if(L===1)g+=rip(.9,3)+'<ellipse cx="'+x+'" cy="50" rx="3" ry=".85" fill="#fff6c9" opacity=".9"/>'; /* Mệnh Tuyền: sóng trên mặt nước, đỉnh quả cầu (dưới nước) chạm mặt nước đúng tâm sóng */
     if(L===4)g+=rip(.23,3);
   }else{const k=L-6,y=31,r=[11,11,11,12,13,16][k];
     const S=[[12,12],[72,11],[14,48],[70,49],[7,30],[78,31],[31,7],[54,56]];
