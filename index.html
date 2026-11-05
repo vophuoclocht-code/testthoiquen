@@ -13,20 +13,10 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" href="./icon-192.png">
 <link rel="apple-touch-icon" href="./icon-180.png">
-<!-- CSS tối thiểu cho màn hình chào: chỉ hiện khi mở từ màn hình chính (standalone) -->
-<style>
-  html,body{margin:0;background:#faf7ff}
-  #splash{display:none}
-  @media (display-mode: standalone){
-    #splash{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:#faf7ff}
-  }
-</style>
+<style>html,body{margin:0;background:#faf7ff}</style>
 <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-
-<!-- Màn hình chào (~0,8 giây, JS sẽ gỡ) -->
-<div id="splash" aria-hidden="true"><img src="./icon-192.png" width="112" height="112" alt=""></div>
 
 <!-- Kho icon SVG (icons.js sẽ nạp vào đây) -->
 <svg id="sprite" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"></svg>

@@ -28,7 +28,7 @@ input,select,textarea{font:inherit;font-size:16px;color:var(--ink)}
 #main{height:100%;overflow:hidden}
 .screen{height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;
   padding:calc(var(--s4) + env(safe-area-inset-top)) var(--s4) calc(var(--tab-h) + 96px + env(safe-area-inset-bottom));
-  animation:enter .22s ease-out}
+  animation:none}
 @keyframes enter{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .h-date{margin:0 0 var(--s1);font:600 1.35rem/1.2 var(--serif)}
 .h-sub{margin:0;color:var(--ink2);font-size:.9rem}
@@ -457,3 +457,10 @@ input[type=date]{width:100%;min-height:48px;padding:10px 14px;border:1.5px solid
 .habit .h-name{align-items:center;gap:6px;line-height:1.2}
 .habit .h-name .ic{flex:none}
 .habit .h-name span{flex:1;min-width:0;line-height:1.2;padding:.1em 0;margin:-.1em 0;overflow:hidden;text-overflow:clip}
+
+/* ===== v22: nút "i" xem mô tả — định vị tuyệt đối ở góc dưới phải, không đổi bố cục thẻ ===== */
+.habit .h-info{position:absolute;right:5px;bottom:5px;width:16px;height:16px;min-width:0;min-height:0;padding:0;border-radius:50%;
+  background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.55);color:#fff;font:italic 700 10px/14px Georgia,serif;text-align:center;z-index:2}
+.habit .h-info::before{content:"";position:absolute;inset:-10px}
+.habit .h-info:active{background:rgba(255,255,255,.4)}
+#f-desc{width:100%;resize:vertical;min-height:72px}

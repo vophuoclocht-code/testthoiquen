@@ -24,14 +24,15 @@ function doAdd(id){const h=D.habits.find(x=>x.id===id);if(!h)return;const b=stat
 function doMinus(id){const h=D.habits.find(x=>x.id===id),l=h&&lastToday(h);if(!l){toast('Hôm nay chưa có gì để trừ');return}removeLog(l.id);vib(15);render();showUndo(()=>{D.log.push(l);save();render()})}
 /* Chạm khung = cộng. Giữ 0,55 giây = trừ. Kéo/cuộn quá 10px thì hủy */
 let pt=null,dId=null,sx=0,sy=0,moved=false,longHit=false;
-document.addEventListener('pointerdown',e=>{const c=e.target.closest('.habit');if(!c)return;dId=c.dataset.id;sx=e.clientX;sy=e.clientY;moved=false;longHit=false;
+document.addEventListener('pointerdown',e=>{if(e.target.closest('.h-info'))return;const c=e.target.closest('.habit');if(!c)return;dId=c.dataset.id;sx=e.clientX;sy=e.clientY;moved=false;longHit=false;
   pt=setTimeout(()=>{pt=null;if(!moved){longHit=true;doMinus(dId)}},550)});
 document.addEventListener('pointermove',e=>{if(dId&&!moved&&Math.hypot(e.clientX-sx,e.clientY-sy)>10){moved=true;clearTimeout(pt);pt=null}});
 document.addEventListener('pointerup',()=>{clearTimeout(pt);pt=null;const id=dId;dId=null;if(id&&!moved&&!longHit)doAdd(id)});
 document.addEventListener('pointercancel',()=>{clearTimeout(pt);pt=null;dId=null});
 document.addEventListener('contextmenu',e=>{if(e.target.closest('.habit'))e.preventDefault()});
 document.addEventListener('click',e=>{const t=e.target,q=s=>t.closest(s);let m;
-  if(m=q('[data-tab]'))go(m.dataset.tab);
+  if(m=q('[data-info]')){const x=D.habits.find(h=>h.id===m.dataset.info);if(x&&x.desc)sheet('<div class="f"><h2 class="h-date">'+esc(x.name)+'</h2><div class="fcard" style="margin-top:12px"><p style="margin:0;white-space:pre-wrap;line-height:1.55">'+esc(x.desc)+'</p></div><button type="button" class="btn" data-close style="width:100%">Đóng</button></div>')}
+  else if(m=q('[data-tab]'))go(m.dataset.tab);
   else if(m=q('.seg button')){const g=m.parentNode;g.querySelectorAll('button').forEach(b=>b.classList.toggle('is-on',b===m));if(g.dataset.seg==='kind')$('#fform').dataset.kind=m.dataset.v;else if(g.dataset.seg==='atg'||g.dataset.seg==='amd')adjRefresh(true)}
   else if(m=q('[data-hx]')){histOpen[m.dataset.hx]=!histOpen[m.dataset.hx];render()}
   else if(m=q('[data-hd]')){statDay=m.dataset.hd;render()}
@@ -46,7 +47,7 @@ document.addEventListener('click',e=>{const t=e.target,q=s=>t.closest(s);let m;
   else if(m=q('[data-save]')){const name=cut5($('#f-name').value.replace(/\s+/g,' ').trim()),n=(id,d)=>{const v=Math.floor(+$('#'+id).value);return isNaN(v)||v<0?d:v},sg=k=>document.querySelector('.seg[data-seg="'+k+'"] .is-on').dataset.v;
     if(!name){toast('Hãy nhập tên thói quen');return}
     const lvs=Array.from({length:12},(_,i)=>Math.max(1,n('f-l'+i,10))),kind=sg('kind');
-    const o={name,icon:selIcon,kind,unit:$('#f-unit').value.trim(),step:kind==='count'?1:Math.max(1,n('f-step',1)),goal:n('f-goal',1),mode:sg('mode'),limit:n('f-limit',0),lvs,th:lvs[0]};
+    const o={name,icon:selIcon,kind,unit:$('#f-unit').value.trim(),desc:$('#f-desc').value.trim(),step:kind==='count'?1:Math.max(1,n('f-step',1)),goal:n('f-goal',1),mode:sg('mode'),limit:n('f-limit',0),lvs,th:lvs[0]};
     const x=D.habits.find(h=>h.id===m.dataset.save);if(x)Object.assign(x,o);else D.habits.push(Object.assign({id:uid()},o));save();closeSheet();render()}
   else if(m=q('[data-move]')){const p=m.dataset.move.split('|');moveHabit(p[0],p[1]);render()}
   else if(m=q('[data-arch]')){const x=D.habits.find(h=>h.id===m.dataset.arch);x.arch=!x.arch;save();render();toast(x.arch?'Đã lưu trữ':'Đã khôi phục')}
@@ -62,7 +63,6 @@ document.addEventListener('change',e=>{const t=e.target;
   else if(t.dataset.import!==undefined&&t.files[0]){const r=new FileReader();r.onload=()=>{const err=importJSON(r.result);err?toast(err):(toast('Đã nhập dữ liệu'),render())};r.readAsText(t.files[0])}});
 /* Khởi động */
 load();document.body.classList.toggle('reduce-motion',D.cfg.reduce);go('habits');
-setTimeout(()=>{const s=$('#splash');if(s)s.remove()},800);
 if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js');
 
