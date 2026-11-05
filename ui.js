@@ -54,7 +54,7 @@ function rHabits(){const hs=D.habits.filter(h=>!h.arch),n=new Date(),nm=D.cfg.na
     '<div class="badge">'+badge(s.lv)+bspan(nm[s.lv-1])+'</div>'+
     '<div class="hc"><div class="hrow"><div class="h-main"><div class="h-name" style="font-size:'+fs+'rem">'+nameIc(x,fs)+'<span>'+esc(x.name)+'</span></div>'+(sub?'<div class="h-sub2">'+sub+'</div>':'')+'</div>'+
     '<div class="count"><b class="cnum'+(len>=4?' xl':len==3?' l':'')+'">'+s.today.v+'</b><span>'+(x.goal>0?'/ '+x.goal+u:(x.unit?esc(x.unit):'hôm nay'))+'</span></div></div>'+
-    '<div class="pg"><div class="wave"><i style="--pct:'+(s.into/s.th*100).toFixed(1)+'%"></i></div><em class="pgn">'+s.into+'/'+s.th+(s.stars?' ★'+s.stars:'')+'</em></div></div>'+(x.desc?'<button type="button" class="h-info" data-info="'+x.id+'" aria-label="Xem mô tả">i</button>':'')+'</article>'}
+    '<div class="pg"><div class="wave"><i style="--pct:'+(s.into/s.th*100).toFixed(1)+'%"></i></div><em class="pgn">'+s.into+'/'+s.th+(s.stars?' ★'+s.stars:'')+'</em></div></div>'+(x.desc?'<button type="button" class="h-info" data-info="'+x.id+'" aria-label="Xem mô tả"><svg width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>':'')+'</article>'}
   return h}
 /* Tên thói quen (tối đa 5 chữ) + biểu tượng luôn nằm gọn trong chiều dài thanh tiến độ (cột h-main rộng đúng bằng thanh).
    Thứ tự thử: 1 dòng chữ to → 2 dòng → 3 dòng, chữ và biểu tượng thu nhỏ cùng nhau cho vừa khung. */
