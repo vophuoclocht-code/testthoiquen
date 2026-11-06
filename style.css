@@ -461,14 +461,17 @@ input[type=date]{width:100%;min-height:48px;padding:10px 14px;border:1.5px solid
 /* ===== v23: mũi tên mở mô tả nằm trong ô "x/y" (căn giữa, ngay dưới ô, sát rìa dưới thẻ); mô tả là ngăn kéo thò xuống dưới thẻ ===== */
 .habit .pgn{position:relative}
 .habit{position:relative;z-index:1}
-/* nút mở/đóng mô tả: "kẹp giấy" ở góc trái, kẹp vào rìa dưới của thẻ — nửa trong thẻ, nửa thò ra ngoài, nằm trên mép ngăn mô tả (nằm ngoài thẻ nên không bị cắt) */
-.h-info{position:absolute;left:10px;top:-24px;width:34px;height:22px;min-width:0;min-height:0;padding:0;border-radius:8px;display:grid;place-items:center;z-index:3;
-  color:#2a1a3d;font-size:0;background:color-mix(in srgb,var(--gl) 22%,#fff);border:1px solid color-mix(in srgb,var(--gl) 40%,#fff);box-shadow:0 2px 6px rgba(40,10,80,.28);transition:top .2s ease}
-.h-desc.is-open .h-info{top:2px}
-.h-info::before{content:"";position:absolute;inset:-6px -6px -10px}
-.h-info:active{filter:brightness(.92)}
-.h-info svg{display:block;transition:transform .2s}
-.h-info.is-open svg{transform:rotate(180deg)}
+/* nút mở/đóng mô tả: một "tab" mọc ra từ rìa dưới của thẻ ở góc trái — cùng màu, cùng viền với thẻ, nối cong mềm vào rìa thẻ (vẽ bằng một đường SVG liền);
+   nằm ngoài thẻ nên không bị cắt. Vùng bấm rộng hơn hình tab. */
+.h-info{position:absolute;left:11px;width:66px;height:18px;top:-19px;min-width:0;min-height:0;padding:0;border:0;background:none;z-index:3;font-size:0;
+  --tf:color-mix(in srgb,var(--c0) 84%,var(--c1));--tb:color-mix(in srgb,var(--gl) 80%,var(--c0));-webkit-tap-highlight-color:transparent}
+.h-desc.is-open .h-info{top:7px}
+.h-tab{position:absolute;left:6px;top:4px;display:block;overflow:visible}
+.h-tab .f{fill:var(--tf)}
+.h-tab .s{fill:none;stroke:var(--tb);stroke-width:1}
+.h-tab .h-chev{fill:none;stroke:var(--fg,#fff);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;transform-box:fill-box;transform-origin:center;transition:transform .2s}
+.h-info.is-open .h-chev{transform:rotate(180deg)}
+.h-info:active .h-tab{filter:brightness(1.12)}
 /* ngăn kéo mô tả: nhạt hơn thẻ, cùng tông màu cấp, nằm trượt ra từ dưới thẻ */
 .h-desc{display:grid;grid-template-rows:0fr;margin:0 14px;position:relative;transition:grid-template-rows .2s ease,margin .2s ease}
 .h-desc.is-open{grid-template-rows:1fr;margin:-26px 14px 12px}
@@ -477,5 +480,5 @@ input[type=date]{width:100%;min-height:48px;padding:10px 14px;border:1.5px solid
   font-size:.98rem;font-weight:600;line-height:1.5;color:#2a1a3d;
   background:linear-gradient(135deg,color-mix(in srgb,var(--gl) 20%,#fff),#fff);
   border:1px solid color-mix(in srgb,var(--gl) 28%,#fff);border-top:0;}
-.reduce-motion .h-desc,.reduce-motion .h-info,.reduce-motion .h-info svg{transition:none}
+.reduce-motion .h-desc,.reduce-motion .h-info,.reduce-motion .h-chev{transition:none}
 #f-desc{width:100%;resize:vertical;min-height:72px;field-sizing:content}
