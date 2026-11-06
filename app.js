@@ -69,7 +69,7 @@ if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js');
 document.addEventListener('input',e=>{if(/^f-l\d$/.test(e.target.id))updateXp()});
 /* Tên thói quen tối đa 5 chữ (tính theo từ cách nhau bởi dấu cách) */
 const MAXW=5,cut5=v=>{const w=v.split(/\s+/).filter(Boolean);return w.length>MAXW?w.slice(0,MAXW).join(' '):v};
-document.addEventListener('input',e=>{const t=e.target;if(t.id==='f-name'){const c=cut5(t.value);if(c!==t.value){t.value=c;toast('Tên tối đa '+MAXW+' chữ')}}});
+document.addEventListener('input',e=>{const t=e.target;if(t.id==='f-desc'){t.style.height='auto';t.style.height=t.scrollHeight+'px'}if(t.id==='f-name'){const c=cut5(t.value);if(c!==t.value){t.value=c;toast('Tên tối đa '+MAXW+' chữ')}}});
 
 function adjSave(){const a=adjCalc();if(isNaN(a.n)){toast('Hãy nhập một số');return}
   if(a.r.md==='set'&&a.n<0){toast('Số mới không được âm');return}

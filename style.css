@@ -461,12 +461,13 @@ input[type=date]{width:100%;min-height:48px;padding:10px 14px;border:1.5px solid
 /* ===== v23: mũi tên mở mô tả nằm trong ô "x/y" (căn giữa, ngay dưới ô, sát rìa dưới thẻ); mô tả là ngăn kéo thò xuống dưới thẻ ===== */
 .habit .pgn{position:relative}
 .habit{position:relative;z-index:1}
-.habit .h-info{position:absolute;left:50%;top:100%;transform:translateX(-50%);width:26px;height:14px;min-width:0;min-height:0;padding:0;border:0;border-radius:9px 9px 0 0;
-  background:rgba(255,255,255,.2);color:#fff;display:grid;place-items:center;z-index:2;font-size:0}
-.habit .h-info svg{display:block;margin-top:2px;transition:transform .2s}
+.habit .h-info{position:absolute;right:0;bottom:0;width:60px;height:20px;min-width:0;min-height:0;padding:0;border:0;background:none;color:#fff;font-size:0;z-index:2}
+/* dải sáng ôm đúng đường cong góc dưới-phải của thẻ (bán kính trong 25px, dải cao 14px) */
+.habit .h-info::after{content:"";position:absolute;right:0;bottom:0;width:44px;height:14px;background:rgba(255,255,255,.2);
+  clip-path:path("M0 8A8 8 0 0 1 8 0H41.45A25 25 0 0 1 19 14H0Z")}
+.habit .h-info:active::after{background:rgba(255,255,255,.4)}
+.habit .h-info svg{position:absolute;right:13px;bottom:4px;display:block;transition:transform .2s;z-index:1}
 .habit .h-info.is-open svg{transform:rotate(180deg)}
-.habit .h-info::before{content:"";position:absolute;inset:-14px -10px -2px}
-.habit .h-info:active{background:rgba(255,255,255,.4)}
 /* ngăn kéo mô tả: nhạt hơn thẻ, cùng tông màu cấp, nằm trượt ra từ dưới thẻ */
 .h-desc{display:grid;grid-template-rows:0fr;margin:0 14px;position:relative;transition:grid-template-rows .2s ease,margin .2s ease}
 .h-desc.is-open{grid-template-rows:1fr;margin:-26px 14px 12px}
@@ -476,4 +477,4 @@ input[type=date]{width:100%;min-height:48px;padding:10px 14px;border:1.5px solid
   background:linear-gradient(135deg,color-mix(in srgb,var(--gl) 20%,#fff),#fff);
   border:1px solid color-mix(in srgb,var(--gl) 28%,#fff);border-top:0;}
 .reduce-motion .h-desc,.reduce-motion .h-info svg{transition:none}
-#f-desc{width:100%;resize:vertical;min-height:72px}
+#f-desc{width:100%;resize:vertical;min-height:72px;field-sizing:content}

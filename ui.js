@@ -54,7 +54,7 @@ function rHabits(){const hs=D.habits.filter(h=>!h.arch),n=new Date(),nm=D.cfg.na
     '<div class="badge">'+badge(s.lv)+bspan(nm[s.lv-1])+'</div>'+
     '<div class="hc"><div class="hrow"><div class="h-main"><div class="h-name" style="font-size:'+fs+'rem">'+nameIc(x,fs)+'<span>'+esc(x.name)+'</span></div>'+(sub?'<div class="h-sub2">'+sub+'</div>':'')+'</div>'+
     '<div class="count"><b class="cnum'+(len>=4?' xl':len==3?' l':'')+'">'+s.today.v+'</b><span>'+(x.goal>0?'/ '+x.goal+u:(x.unit?esc(x.unit):'hôm nay'))+'</span></div></div>'+
-    '<div class="pg"><div class="wave"><i style="--pct:'+(s.into/s.th*100).toFixed(1)+'%"></i></div><em class="pgn">'+s.into+'/'+s.th+(s.stars?' ★'+s.stars:'')+(x.desc?'<button type="button" class="h-info'+(descOpen[x.id]?' is-open':'')+'" data-info="'+x.id+'" aria-label="Xem mô tả" aria-expanded="'+(!!descOpen[x.id])+'"><svg width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>':'')+'</em></div></div></article>'+
+    '<div class="pg"><div class="wave"><i style="--pct:'+(s.into/s.th*100).toFixed(1)+'%"></i></div><em class="pgn">'+s.into+'/'+s.th+(s.stars?' ★'+s.stars:'')+'</em></div></div>'+(x.desc?'<button type="button" class="h-info'+(descOpen[x.id]?' is-open':'')+'" data-info="'+x.id+'" aria-label="Xem mô tả" aria-expanded="'+(!!descOpen[x.id])+'"><svg width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>':'')+'</article>'+
     (x.desc?'<div class="h-desc'+(descOpen[x.id]?' is-open':'')+'" data-desc="'+x.id+'" style="'+lvStyle(s.lv-1)+'"><div class="h-desc-in"><div class="h-desc-box">'+esc(x.desc)+'</div></div></div>':'')}
   return h}
 /* Tên thói quen (tối đa 5 chữ) + biểu tượng luôn nằm gọn trong chiều dài thanh tiến độ (cột h-main rộng đúng bằng thanh).
@@ -151,7 +151,7 @@ function formHtml(x){const isNew=!x;x=x||{name:'',icon:'h-star',kind:'count',uni
   const lab=['Thăng cấp 1: '+nm[0]+' → '+nm[1],'Thăng cấp 2: '+nm[1]+' → '+nm[2],'Thăng cấp 3: '+nm[2]+' → '+nm[3],'Mỗi ★ sau '+nm[3]];
   return '<div class="f" id="fform" data-kind="'+x.kind+'"><h2 class="h-date">'+(x.id?'Sửa':'Thêm')+' thói quen</h2>'+
   '<div class="fcard"><h3 class="fsec">Thông tin</h3><div class="field"><label for="f-name">Tên</label><input type="text" id="f-name" maxlength="40" value="'+esc(x.name)+'"></div>'+
-  '<div class="field"><label for="f-desc">Mô tả (tuỳ chọn)</label><textarea id="f-desc" rows="3" maxlength="300" placeholder="Ghi chú về thói quen này…">'+esc(x.desc||'')+'</textarea></div>'+
+  '<div class="field"><label for="f-desc">Mô tả (tuỳ chọn)</label><textarea id="f-desc" rows="3" placeholder="Ghi chú về thói quen này…">'+esc(x.desc||'')+'</textarea></div>'+
   '<div class="field" style="margin:0"><label>Biểu tượng</label><div class="icon-grid">'+HICONS.map(i=>'<button type="button" data-ic="'+i+'" class="'+(i===x.icon?'is-on':'')+'">'+ic(i)+'</button>').join('')+'</div></div></div>'+
   '<div class="fcard"><h3 class="fsec">Cách ghi nhận</h3>'+seg('kind',[['count','Đếm lần'],['amount','Theo lượng']],x.kind)+
   '<div class="g2" style="margin-top:12px"><div class="field"><label for="f-unit">Đơn vị</label><input type="text" id="f-unit" maxlength="12" placeholder="lần, ml, trang…" value="'+esc(x.unit)+'"></div>'+num('f-step','Cộng nhanh',x.step,1,'','only-amount')+'</div>'+
