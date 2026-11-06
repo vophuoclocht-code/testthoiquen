@@ -31,7 +31,7 @@ document.addEventListener('pointerup',()=>{clearTimeout(pt);pt=null;const id=dId
 document.addEventListener('pointercancel',()=>{clearTimeout(pt);pt=null;dId=null});
 document.addEventListener('contextmenu',e=>{if(e.target.closest('.habit'))e.preventDefault()});
 document.addEventListener('click',e=>{const t=e.target,q=s=>t.closest(s);let m;
-  if(m=q('[data-info]')){const x=D.habits.find(h=>h.id===m.dataset.info);if(x&&x.desc)sheet('<div class="f"><h2 class="h-date">'+esc(x.name)+'</h2><div class="fcard" style="margin-top:12px"><p style="margin:0;white-space:pre-wrap;line-height:1.55">'+esc(x.desc)+'</p></div><button type="button" class="btn" data-close style="width:100%">Đóng</button></div>')}
+  if(m=q('[data-info]')){const id=m.dataset.info,o=descOpen[id]=!descOpen[id];m.classList.toggle('is-open',o);m.setAttribute('aria-expanded',o);const d=document.querySelector('[data-desc="'+id+'"]');if(d)d.classList.toggle('is-open',o)}
   else if(m=q('[data-tab]'))go(m.dataset.tab);
   else if(m=q('.seg button')){const g=m.parentNode;g.querySelectorAll('button').forEach(b=>b.classList.toggle('is-on',b===m));if(g.dataset.seg==='kind')$('#fform').dataset.kind=m.dataset.v;else if(g.dataset.seg==='atg'||g.dataset.seg==='amd')adjRefresh(true)}
   else if(m=q('[data-hx]')){histOpen[m.dataset.hx]=!histOpen[m.dataset.hx];render()}
