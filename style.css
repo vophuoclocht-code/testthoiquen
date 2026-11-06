@@ -461,13 +461,14 @@ input[type=date]{width:100%;min-height:48px;padding:10px 14px;border:1.5px solid
 /* ===== v23: mũi tên mở mô tả nằm trong ô "x/y" (căn giữa, ngay dưới ô, sát rìa dưới thẻ); mô tả là ngăn kéo thò xuống dưới thẻ ===== */
 .habit .pgn{position:relative}
 .habit{position:relative;z-index:1}
-.habit .h-info{position:absolute;right:0;bottom:0;width:60px;height:20px;min-width:0;min-height:0;padding:0;border:0;background:none;color:#fff;font-size:0;z-index:2}
-/* dải sáng ôm đúng đường cong góc dưới-phải của thẻ (bán kính trong 25px, dải cao 14px) */
-.habit .h-info::after{content:"";position:absolute;right:0;bottom:0;width:44px;height:14px;background:rgba(255,255,255,.2);
-  clip-path:path("M0 8A8 8 0 0 1 8 0H41.45A25 25 0 0 1 19 14H0Z")}
-.habit .h-info:active::after{background:rgba(255,255,255,.4)}
-.habit .h-info svg{position:absolute;right:13px;bottom:4px;display:block;transition:transform .2s;z-index:1}
-.habit .h-info.is-open svg{transform:rotate(180deg)}
+/* nút mở/đóng mô tả: "kẹp giấy" ở góc trái, kẹp vào rìa dưới của thẻ — nửa trong thẻ, nửa thò ra ngoài, nằm trên mép ngăn mô tả (nằm ngoài thẻ nên không bị cắt) */
+.h-info{position:absolute;left:10px;top:-24px;width:34px;height:22px;min-width:0;min-height:0;padding:0;border-radius:8px;display:grid;place-items:center;z-index:3;
+  color:#2a1a3d;font-size:0;background:color-mix(in srgb,var(--gl) 22%,#fff);border:1px solid color-mix(in srgb,var(--gl) 40%,#fff);box-shadow:0 2px 6px rgba(40,10,80,.28);transition:top .2s ease}
+.h-desc.is-open .h-info{top:2px}
+.h-info::before{content:"";position:absolute;inset:-6px -6px -10px}
+.h-info:active{filter:brightness(.92)}
+.h-info svg{display:block;transition:transform .2s}
+.h-info.is-open svg{transform:rotate(180deg)}
 /* ngăn kéo mô tả: nhạt hơn thẻ, cùng tông màu cấp, nằm trượt ra từ dưới thẻ */
 .h-desc{display:grid;grid-template-rows:0fr;margin:0 14px;position:relative;transition:grid-template-rows .2s ease,margin .2s ease}
 .h-desc.is-open{grid-template-rows:1fr;margin:-26px 14px 12px}
@@ -476,5 +477,5 @@ input[type=date]{width:100%;min-height:48px;padding:10px 14px;border:1.5px solid
   font-size:.98rem;font-weight:600;line-height:1.5;color:#2a1a3d;
   background:linear-gradient(135deg,color-mix(in srgb,var(--gl) 20%,#fff),#fff);
   border:1px solid color-mix(in srgb,var(--gl) 28%,#fff);border-top:0;}
-.reduce-motion .h-desc,.reduce-motion .h-info svg{transition:none}
+.reduce-motion .h-desc,.reduce-motion .h-info,.reduce-motion .h-info svg{transition:none}
 #f-desc{width:100%;resize:vertical;min-height:72px;field-sizing:content}

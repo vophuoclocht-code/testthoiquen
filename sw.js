@@ -1,6 +1,6 @@
 /* Service worker – chạy offline hoàn toàn.
    >>> MỖI LẦN ĐẨY CODE MỚI: tăng số phiên bản bên dưới (v1 → v2 → v3…) <<< */
-const CACHE = 'thoiquen-v29';
+const CACHE = 'thoiquen-v30';
 
 // Danh sách file cần lưu. Dùng allSettled nên thiếu 1 file cũng không làm hỏng cài đặt.
 const FILES = [
