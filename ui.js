@@ -136,12 +136,19 @@ function rStats(){const st=streaks(),n=new Date(),y=n.getFullYear(),m=n.getMonth
     h+='<div class="row">'+ic(x.icon)+'<div class="grow"><div class="t">'+esc(x.name)+'</div><div class="n">'+esc(D.cfg.names[s.lv-1])+(s.stars?' '+'★'.repeat(s.stars):'')+' · '+s.pts+' điểm</div></div><b>'+tot+' '+esc(unitOf(x))+'</b></div>'}
   return h+'</div>'}
 function sw(k,on){return '<button class="switch" role="switch" aria-checked="'+on+'" data-sw="'+k+'"></button>'}
-function rSettings(){let h='<h1 class="h-date">Cài đặt</h1><details class="group"><summary class="row xs"><span class="grow">Tên 12 cấp</span>'+ic('ui-down','s')+'</summary>';
+/* Công tắc Chế độ online (lưu riêng trong localStorage 'tq_online', không nằm trong file sao lưu) */
+const isOnline=()=>{try{return localStorage.getItem('tq_online')==='1'}catch(e){return false}};
+function onlineBox(){const on=isOnline();
+  return '<div class="group"><div class="row"><div class="grow">Chế độ online<div style="font-size:.82rem;font-weight:500;color:var(--ink2);margin-top:2px">'+
+    (on?'Đang online: lấy bản mới nhất từ mạng. Cập nhật xong có thể tắt.':'Đang offline: mở app không cần mạng. Bật để cập nhật bản mới.')+
+    '</div></div><button class="switch" role="switch" aria-checked="'+on+'" data-online></button></div>'+
+    (on?'<div class="row"><button class="btn" data-update>Kiểm tra cập nhật ngay</button></div>':'')+'</div>'}
+function rSettings(){let h='<h1 class="h-date">Cài đặt</h1>'+onlineBox()+'<details class="group"><summary class="row xs"><span class="grow">Tên 12 cấp</span>'+ic('ui-down','s')+'</summary>';
   D.cfg.names.forEach((t,i)=>h+='<div class="row"><div class="grow">Tên cấp '+(i+1)+'</div><input type="text" maxlength="20" value="'+esc(t)+'" data-name="'+i+'" style="width:150px"></div>');
   h+='</details><div class="group"><div class="row"><div class="grow">Giờ bắt đầu ngày mới</div><select data-day style="width:110px"><option value="0"'+(D.cfg.dayStart==0?' selected':'')+'>00:00</option><option value="3"'+(D.cfg.dayStart==3?' selected':'')+'>03:00</option></select></div>'+
   '<div class="row"><div class="grow">Rung</div>'+sw('vibrate',D.cfg.vibrate)+'</div><div class="row"><div class="grow">Giảm hiệu ứng</div>'+sw('reduce',D.cfg.reduce)+'</div></div><div class="group">'+
   '<div class="row"><button class="btn" data-export>'+ic('ui-download')+' Xuất sao lưu</button><label class="btn" style="margin-left:auto">'+ic('ui-upload')+' Nhập<input type="file" accept=".json,application/json" data-import hidden></label></div>'+
-  '<div class="row"><button class="btn btn-danger" data-reset>Xóa toàn bộ dữ liệu</button></div></div><p class="h-sub" style="text-align:center">Đã sẵn sàng dùng không cần mạng</p>';
+  '<div class="row"><button class="btn btn-danger" data-reset>Xóa toàn bộ dữ liệu</button></div></div><p class="h-sub" style="text-align:center">'+(isOnline()?'Đang ở chế độ online':'Đã sẵn sàng dùng không cần mạng')+'</p>';
   return h}
 const R={habits:rHabits,manage:rManage,history:rHistory,stats:rStats,settings:rSettings};
 function formHtml(x){const isNew=!x;x=x||{name:'',icon:'h-star',kind:'count',unit:'lần',step:1,goal:1,mode:'log',limit:0};

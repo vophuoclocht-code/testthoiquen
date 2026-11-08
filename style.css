@@ -461,24 +461,37 @@ input[type=date]{width:100%;min-height:48px;padding:10px 14px;border:1.5px solid
 /* ===== v23: mũi tên mở mô tả nằm trong ô "x/y" (căn giữa, ngay dưới ô, sát rìa dưới thẻ); mô tả là ngăn kéo thò xuống dưới thẻ ===== */
 .habit .pgn{position:relative}
 .habit{position:relative;z-index:1}
-/* nút mở/đóng mô tả: một "tab" mọc ra từ rìa dưới của thẻ ở góc trái — cùng màu, cùng viền với thẻ, nối cong mềm vào rìa thẻ (vẽ bằng một đường SVG liền);
-   nằm ngoài thẻ nên không bị cắt. Vùng bấm rộng hơn hình tab. */
-.h-info{position:absolute;left:11px;width:66px;height:18px;top:-19px;min-width:0;min-height:0;padding:0;border:0;background:none;z-index:3;font-size:0;
-  --tf:color-mix(in srgb,var(--c0) 84%,var(--c1));--tb:color-mix(in srgb,var(--gl) 80%,var(--c0));-webkit-tap-highlight-color:transparent;transition:top var(--dur) var(--ease)}
-.h-desc.is-open .h-info{top:7px}
+/* ===== v24: mô tả = ngăn kéo KÉO TỪ TRÊN XUỐNG, cắm liền vào thẻ ===== */
+/* nút mở/đóng mô tả: một "tab" mọc ra từ rìa dưới của thẻ ở góc trái — cùng màu, cùng viền với thẻ.
+   Nằm ngoài thẻ nên không bị cắt. Vùng bấm rộng hơn hình tab. */
+.h-info{position:absolute;left:11px;width:66px;height:18px;top:7px;min-width:0;min-height:0;padding:0;border:0;background:none;z-index:3;font-size:0;-webkit-tap-highlight-color:transparent}
 .h-tab{position:absolute;left:6px;top:4px;display:block;overflow:visible}
 .h-tab .f{fill:var(--tf)}
 .h-tab .s{fill:none;stroke:var(--tb);stroke-width:1}
 .h-tab .h-chev{fill:none;stroke:var(--fg,#fff);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;transform-box:view-box;transform-origin:27px 8.3px;transition:transform var(--dur) var(--ease)}
 .h-info.is-open .h-chev{transform:rotate(180deg)}
 .h-info:active .h-tab{filter:brightness(1.06)}
-/* ngăn kéo mô tả: nhạt hơn thẻ, cùng tông màu cấp, nằm trượt ra từ dưới thẻ */
-.h-desc{--dur:.28s;--ease:cubic-bezier(.4,0,.2,1);display:grid;grid-template-rows:0fr;margin:0 14px;position:relative;transition:grid-template-rows var(--dur) var(--ease),margin var(--dur) var(--ease)}
-.h-desc.is-open{grid-template-rows:1fr;margin:-26px 14px 12px}
-.h-desc-in{overflow:hidden;min-height:0}
-.h-desc-box{margin-top:14px;padding:26px 16px 16px;border-radius:0 0 22px 22px;white-space:pre-wrap;overflow-wrap:anywhere;
+
+/* Ngăn kéo mô tả. Hình học (không phụ thuộc trình duyệt tự nội suy):
+   - Đỉnh vùng chứa luôn nằm CHÌM 14px sau đáy thẻ (thẻ có z-index cao hơn nên che phần này).
+   - Khi ĐÓNG, vùng chứa cao đúng 14px (toàn bộ nằm sau thẻ) và khung bị đẩy lên hết → không thấy gì.
+   - Khi MỞ, JS (toggleDesc trong app.js) cho chiều cao vùng chứa và độ trượt của khung chạy CÙNG nhịp:
+     mép dưới của khung luôn trùng mép dưới vùng chứa = khung được kéo xuống từ đáy thẻ, các thẻ bên dưới đi theo đúng nhịp.
+   - Đóng lại thì chạy ngược: khung kéo lên, chui vào sau thẻ. */
+.h-desc{--dur:.32s;--ease:cubic-bezier(.3,.7,.2,1);--tuck:14px;
+  --tf:color-mix(in srgb,var(--c0) 84%,var(--c1));--tb:color-mix(in srgb,var(--gl) 80%,var(--c0));
+  position:relative;margin:calc(-1*(var(--s3) + var(--tuck))) 14px var(--s3)}
+.h-desc-in{height:var(--tuck);overflow:hidden;visibility:hidden;transition:visibility 0s linear var(--dur)}
+.h-desc.is-open .h-desc-in{height:auto;visibility:visible;transition-delay:0s}
+.h-desc-box{position:relative;box-sizing:border-box;padding:calc(var(--tuck) + 26px) 16px 16px;border-radius:0 0 22px 22px;white-space:pre-wrap;overflow-wrap:anywhere;
   font-size:.98rem;font-weight:600;line-height:1.5;color:#2a1a3d;
   background:linear-gradient(135deg,color-mix(in srgb,var(--gl) 20%,#fff),#fff);
-  border:1px solid color-mix(in srgb,var(--gl) 28%,#fff);border-top:0;}
-.reduce-motion .h-desc,.reduce-motion .h-info,.reduce-motion .h-chev{transition:none}
+  border:1.5px solid color-mix(in srgb,var(--gl) 80%,transparent);border-top:0;
+  transform:translateY(calc(var(--tuck) - 100%))}
+.h-desc.is-open .h-desc-box{transform:none}
+/* bóng đổ nhẹ từ thẻ xuống khung → nhìn như khung gắn liền với thẻ */
+.h-desc-box::before{content:"";position:absolute;left:0;right:0;top:0;height:calc(var(--tuck) + 22px);pointer-events:none;
+  background:linear-gradient(to bottom,color-mix(in srgb,var(--gl) 30%,transparent),transparent)}
+.reduce-motion .h-desc-in{transition:none}
+.reduce-motion .h-chev{transition:none}
 #f-desc{width:100%;resize:vertical;min-height:72px;field-sizing:content}
